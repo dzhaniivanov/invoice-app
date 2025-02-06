@@ -6,15 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
+import { createAction } from "@/app/actions";
+
 export default async function NewInvoice() {
-  const results = await db.execute(sql`SELECT current_database()`);
   return (
     <main className="flex flex-col h-full justify-center  max-w-5l gap-6 mx-auto my-12">
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold">Create Invoice</h1>
       </div>
-      {JSON.stringify(results)}
-      <form className="grid gap-4 max-w-xs">
+      <form action={createAction} className="grid gap-4 max-w-xs">
         <div>
           <Label htmlFor="name" className="block mb-2 font-semibold text-sm">
             Billing Name
