@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Form from "next/form";
 
 import { createAction } from "@/app/actions";
-import { startTransition, SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import SubmitButton from "@/components/SubmitButton";
 
 export default function NewInvoice() {

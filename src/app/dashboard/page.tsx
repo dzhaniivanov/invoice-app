@@ -70,7 +70,7 @@ export default async function Dashboard() {
                 <Link className="p-4 block" href={`/invoices/${invoice.id}`}>
                   <Badge
                     className={cn(
-                      "rounded-full",
+                      "rounded-full capitalize",
                       invoice.status == "open" && "bg-blue-500",
                       invoice.status == "paid" && "bg-green-600",
                       invoice.status == "void" && "bg-zinc-700",
