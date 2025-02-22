@@ -11,8 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
 import Link from "next/link";
+import { db } from "@/db";
+import { Invoices } from "@/db/schema";
+import { cn } from "@/lib/utils";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const results = await db.select().from(Invoices);
+  console.log(results);
   return (
     <main className="flex flex-col h-full justify-center text-center max-w-5l gap-6 mx-auto my-12">
       <div className="flex justify-between">
@@ -38,23 +43,54 @@ export default function Dashboard() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium text-left p-4">
-              <span className="font-semibold">12/10/2024</span>
-            </TableCell>
-            <TableCell className="text-left p-4">
-              <span className="font-semibold">John Doe</span>
-            </TableCell>
-            <TableCell className="text-left p-4">
-              <span>john@gmail.com</span>
-            </TableCell>
-            <TableCell className="text-center p-4">
-              <Badge className="rounded-full">Open </Badge>
-            </TableCell>
-            <TableCell className="text-right p-4">
-              <span className="font-semibold">$100.00</span>
-            </TableCell>
-          </TableRow>
+          {results.map((invoice) => (
+            <TableRow key={invoice.id}>
+              <TableCell className="font-medium text-left p-0">
+                <Link
+                  href={`/invoices/${invoice.id}`}
+                  className="font-semibold p-4 block"
+                >
+                  {new Date(invoice.createTs).toLocaleDateString()}
+                </Link>
+              </TableCell>
+              <TableCell className="text-left p-0">
+                <Link
+                  href={`/invoices/${invoice.id}`}
+                  className="font-semibold p-4 block"
+                >
+                  John Doe
+                </Link>
+              </TableCell>
+              <TableCell className="text-left p-0">
+                <Link className="p-4 block" href={`/invoices/${invoice.id}`}>
+                  john@gmail.com
+                </Link>
+              </TableCell>
+              <TableCell className="text-center p-0">
+                <Link className="p-4 block" href={`/invoices/${invoice.id}`}>
+                  <Badge
+                    className={cn(
+                      "rounded-full",
+                      invoice.status == "open" && "bg-blue-500",
+                      invoice.status == "paid" && "bg-green-600",
+                      invoice.status == "void" && "bg-zinc-700",
+                      invoice.status == "uncollectible" && "bg-red-600"
+                    )}
+                  >
+                    {invoice.status}
+                  </Badge>
+                </Link>
+              </TableCell>
+              <TableCell className="text-right p-0">
+                <Link
+                  href={`/invoices/${invoice.id}`}
+                  className="font-semibold p-4 block"
+                >
+                  ${(invoice.value / 100).toFixed(2)}
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </main>
